@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡単オークション</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #timer {
+            font-size: 2rem;
+            color: red;
+        }
+        #totalAmount {
+            font-size: 1.5rem;
+            margin: 20px 0;
+        }
+        .quickBidButton {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>簡単オークション</h1>
+    <div>
+        <p>残り時間: <span id="timer">00:10:00</span></p>
+        <p id="totalAmount">合計金額: ¥0</p>
+        <div>
+            <!-- クイックビッドボタン -->
+            <button class="quickBidButton" data-amount="1000">+1000</button>
+            <button class="quickBidButton" data-amount="2000">+2000</button>
+            <button class="quickBidButton" data-amount="5000">+5000</button>
+        </div>
+        <input type="number" id="bidAmount" placeholder="金額を入力" min="1" step="1">
+        <button id="addBid">金額を追加</button>
+    </div>
+    <button id="startAuction">開始</button>
+    <p id="status" style="font-weight: bold;"></p>
+
+    <script>
+        let timerElement = document.getElementById("timer");
+        let totalAmountElement = document.getElementById("totalAmount");
+        let bidInput = document.getElementById("bidAmount");
+        let startButton = document.getElementById("startAuction");
+        let addBidButton = document.getElementById("addBid");
+        let statusElement = document.getElementById("status");
+        let quickBidButtons = document.querySelectorAll(".quickBidButton");
+
+        let countdown;
+        let timeLeft = 600; // 初期カウントダウン時間（10分 = 600秒）
+        let totalAmount = 0; // 合計金額
+        let auctionActive = false;
+
+        // 時間を時:分:秒の形式でフォーマットする関数
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // カウントダウンタイマーの開始
+        function startAuction() {
+            if (auctionActive) return;
+
+            auctionActive = true;
+            statusElement.textContent = "オークション中...";
+            timerElement.textContent = formatTime(timeLeft);
+
+            countdown = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = formatTime(timeLeft);
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    auctionActive = false;
+                    statusElement.textContent = "オークション終了!";
+                }
+            }, 1000);
+        }
+
+        // クイックビッドボタンのクリックイベント
+        quickBidButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const amount = parseInt(button.getAttribute("data-amount"), 10);
+                bidInput.value = amount; // ボタンの金額を入力フィールドに反映
+            });
+        });
+
+        // 入力金額を合計に追加
+        function addBid() {
+            if (!auctionActive) {
+                alert("オークションが開始されていません！");
+                return;
+            }
+
+            let bid = parseInt(bidInput.value, 10);
+            if (isNaN(bid) || bid <= 0) {
+                alert("有効な金額を入力してください！");
+                return;
+            }
+
+            totalAmount += bid;
+            totalAmountElement.textContent = `合計金額: ¥${totalAmount.toLocaleString()}`;
+            bidInput.value = ""; // 入力フィールドをクリア
+        }
+
+        // イベントリスナーの設定
+        startButton.addEventListener("click", startAuction);
+        addBidButton.addEventListener("click", addBid);
+    </script>
+</body>
+</html>
