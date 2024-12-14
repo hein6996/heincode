@@ -5,66 +5,179 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Auction</title>
     <style>
+        /* Global Styles */
         body {
             font-family: Arial, sans-serif;
-            margin-top: 50px;
-            text-align: center;
-        }
-        .auction-container {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            margin-bottom: 30px;
+            flex-direction: column;
+            align-items: center;
         }
-        .auction-image {
-            width: 250px;
-            height: 300px;
-            margin-right: 20px;
-        }
-        .auction-details {
-            text-align: left;
+
+        h1 {
+            margin: 20px 0;
             font-size: 2rem;
         }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        /* Setup Section */
+        #setupSection {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #setupButton label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        #setupButton input {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        #startAuctionSetup {
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #startAuctionSetup:hover {
+            background-color: #0056b3;
+        }
+
+        /* Auction Section */
+        #auctionSection {
+            display: none;
+            text-align: center;
+        }
+
+        .auction-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .auction-image {
+            width: 100%;
+            max-width: 200px;
+            height: 250px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .auction-details {
+            text-align: left;
+            font-size: xx-large;
+        }
+
         .auction-details p {
             margin: 10px 0;
         }
-        .hidden {
-            display: none;
-        }
-        #auctionActions {
-            margin-top: 20px;
-        }
+
         #timer {
             font-size: 1.5rem;
             color: blue;
             margin-bottom: 20px;
         }
-        input, button {
-            margin: 10px;
-            padding: 10px;
-            font-size: 1rem;
+
+        /* Action Section */
+        #auctionActions {
+            display: grid;
+            gap: 15px;
+            margin-top: 200px;
         }
-        .quickBidButton {
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 1rem;
+
+        .hidden {
+            display: none;
+        }
+
+        #bidSection {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #bidSection input {
+            padding: 10px;
+            font-size: x-small;
+            width: 100px;
+        }
+
+        #bidSection button {
+            padding: 10px;
+            font-size: x-small;
             cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #bidSection button:hover {
+            background-color: #218838;
+        }
+
+        #quickBidButton button {
+            padding: 10px 20px;
+            font-size: x-small;
+            cursor: pointer;
+            background-color: #ffc107;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #quickBidButton button:hover {
+            background-color: #e0a800;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auction-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .auction-details {
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Setup Screen -->
-    <div id="setupSection">
+    <div id="setupSection" class="container">
         <h1>Simple Auction</h1>
-        <div>
+        <div id="setupButton">
             <label for="auctionTitle">Auction Title:</label>
             <input type="text" id="auctionTitle" placeholder="Enter auction title">
-        </div>
-        <div>
+
             <label for="auctionTime">Duration (Minutes):</label>
-            <input type="number" id="auctionTime" placeholder="Enter duration" min="1" step="1">
-        </div>
-        <div>
+            <input type="number" id="auctionTime" placeholder="Enter duration" min="0" step="1">
+
             <label for="auctionImageUpload">Upload Item Image:</label>
             <input type="file" id="auctionImageUpload" accept="image/*">
         </div>
@@ -72,16 +185,14 @@
     </div>
 
     <!-- Auction Screen -->
-    <div id="auctionSection" class="hidden">
-        <h1 id="auctionTitleDisplay" style="font-size: 2.5rem; font-weight: bold;"></h1>
-        <div id="timer">Time Remaining: <span id="timeRemaining">00:00</span></div>
+    <div id="auctionSection" class="container">
+        <h1 id="auctionTitleDisplay"></h1>
+        <div id="timer" class="hidden">Time Remaining: <span id="timeRemaining">00:00</span></div>
 
         <!-- Main Auction Layout -->
         <div class="auction-container">
-            <!-- Image Section -->
-            <img id="auctionImage" class="auction-image hidden" />
+            <img id="auctionImage" class="auction-image hidden" alt="Auction Item Image">
 
-            <!-- Details Section -->
             <div class="auction-details">
                 <p id="totalPrice">စုစုပေါင်း: ¥0</p>
                 <p id="totalAmount">လေလံစျေး: ¥0</p>
@@ -91,16 +202,16 @@
 
         <!-- Action Section -->
         <div id="auctionActions">
-            <div>
-                <button class="quickBidButton" data-amount="1000">+1000</button>
-                <button class="quickBidButton" data-amount="2000">+2000</button>
-                <button class="quickBidButton" data-amount="5000">+5000</button>
-            </div>
-            <input type="number" id="bidAmount" placeholder="Enter bid amount" min="1" step="1">
-            <button id="addBid">Add Amount</button>
-            <div>
+            <div id="bidSection">
+                <input type="number" id="bidAmount" placeholder="Enter bid amount" min="1" step="1">
+                <button id="addBid">Add Amount</button>
                 <input type="number" id="donationInput" placeholder="Enter donation" min="0" step="1">
                 <button id="addDonation">Add Donation</button>
+            </div>
+            <div id="quickBidButton">
+                <button class="quickBidButton" data-amount="10000">+10000</button>
+                <button class="quickBidButton" data-amount="50000">+50000</button>
+                <button class="quickBidButton" data-amount="100000">+100000</button>
             </div>
         </div>
     </div>
@@ -123,6 +234,7 @@
         const auctionTimeInput = document.getElementById("auctionTime");
         const auctionImageUpload = document.getElementById("auctionImageUpload");
         const startAuctionSetup = document.getElementById("startAuctionSetup");
+        const timerContainer = document.getElementById("timer");
 
         let totalAmount = 0;
         let additionalDonation = 0;
@@ -139,11 +251,18 @@
                 return;
             }
 
-            if (isNaN(time) || time <= 0) {
-                alert("Please enter a valid duration!");
-                return;
+            // タイマー設定
+            if (!isNaN(time) && time > 0) {
+                timerContainer.classList.remove("hidden");
+                timeLeft = time * 60; // 秒に変換
+                timerElement.textContent = formatTime(timeLeft);
+                startTimer();
+            } else {
+                timerContainer.classList.add("hidden");
+                alert("Duration is not set or invalid. Timer will not be displayed.");
             }
 
+            // 画像アップロード処理
             const imageFile = auctionImageUpload.files[0];
             if (imageFile) {
                 const reader = new FileReader();
@@ -154,14 +273,12 @@
                 reader.readAsDataURL(imageFile);
             }
 
+            // タイトルを表示
             auctionTitleDisplay.textContent = title;
-            timeLeft = time * 60; // Convert minutes to seconds
-            timerElement.textContent = formatTime(timeLeft);
 
-            setupSection.classList.add("hidden");
-            auctionSection.classList.remove("hidden");
-
-            startTimer();
+            // セットアップセクションを非表示、オークションセクションを表示
+            setupSection.style.display = "none";
+            auctionSection.style.display = "block";
         });
 
         // Start Timer
@@ -220,9 +337,9 @@
 
         // Update Total Display
         function updateTotal() {
-            totalPriceElement.textContent = `Total Price: ¥${(totalAmount + additionalDonation).toLocaleString()}`;
-            totalAmountElement.textContent = `Auction Success: ¥${totalAmount.toLocaleString()}`;
-            additionalDonationElement.textContent = `Additional Donation: ¥${additionalDonation.toLocaleString()}`;
+            totalPriceElement.textContent = `စုစုပေါင်း: ¥${(totalAmount + additionalDonation).toLocaleString()}`;
+            totalAmountElement.textContent = `လေလံစျေး: ¥${totalAmount.toLocaleString()}`;
+            additionalDonationElement.textContent = `ထပ်တိုးအလှူငွေ: ¥${additionalDonation.toLocaleString()}`;
         }
     </script>
 </body>
