@@ -304,7 +304,7 @@
         // Add Bid
         addBidButton.addEventListener("click", () => {
             const bid = parseInt(bidInput.value, 10);
-            if (isNaN(bid) || bid <= 0) {
+            if (isNaN(bid)) {
                 alert("Please enter a valid amount!");
                 return;
             }
@@ -317,7 +317,7 @@
         // Add Donation
         addDonationButton.addEventListener("click", () => {
             const donation = parseInt(donationInput.value, 10);
-            if (isNaN(donation) || donation < 0) {
+            if (isNaN(donation)) {
                 alert("Please enter a valid donation amount!");
                 return;
             }
