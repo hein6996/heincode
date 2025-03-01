@@ -19,6 +19,7 @@
         h1 {
             margin: 20px 0;
             font-size: 2rem;
+            color: darkred;
         }
 
         .container {
@@ -103,7 +104,7 @@
         #auctionActions {
             display: grid;
             gap: 15px;
-            margin-top: 200px;
+            margin-top: 80px;
         }
 
         .hidden {
@@ -309,7 +310,7 @@
                 return;
             }
 
-            totalAmount += bid;
+            totalAmount = bid;
             updateTotal();
             bidInput.value = "";
         });
@@ -322,7 +323,7 @@
                 return;
             }
 
-            additionalDonation += donation;
+            additionalDonation = donation;
             updateTotal();
             donationInput.value = "";
         });
